@@ -5,7 +5,8 @@ set -e # Exit immediately if a command exits with a non-zero status.
 # Import configuration file
 source ./config.sh
 
-function download_kb {
+function download_kb () {
+
   # Add commands to install application here
   read -p "Download SCANOSS KB (y/abort) [abort]? " -n 1 -r
   echo
@@ -23,18 +24,32 @@ function download_kb {
   log "Downloading $REMOTE_LDB_LOCATION KB to $DOWNLOAD_LOCATION..."
 
   lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $REMOTE_LDB_LOCATION $DOWNLOAD_LOCATION/oss; exit" sftp://sftp.scanoss.com:49322
+  
+  echo "SCANOSS KB installation successful!"
 
-  # Create symlink if necesary
-  if [[ "$DOWNLOAD_LOCATION" != "$LDB_LOCATION" ]]; then
-    log "Creating symlink to $DOWNLOAD_LOCATION"
-    echo "Download directory is not the ldb default $LDB_LOCATION. Creating symlink to $DOWNLOAD_LOCATION..."
-    ln -s $DOWNLOAD_LOCATION/oss $LDB_LOCATION/oss
-  fi
+  read -p "Configure SCANOSS KB permissions and directories on this server (yes/no): " END_USER
+  END_USER_LOWER=$(echo "$END_USER" | tr '[:upper:]' '[:lower:]') 
+    
+  case "$END_USER" in 
+    "yes")
+      # Create symlink if necesary
+      if [[ "$DOWNLOAD_LOCATION" != "$LDB_LOCATION" ]]; then
+        log "Creating symlink to $DOWNLOAD_LOCATION"
+        echo "Download directory is not the ldb default $LDB_LOCATION. Creating symlink to $DOWNLOAD_LOCATION..."
+        ln -s $DOWNLOAD_LOCATION/oss $LDB_LOCATION/oss
+      fi
 
-  # At last, update permissions
-  chown -R $RUNTIME_USER:$RUNTIME_USER $DOWNLOAD_LOCATION
+      # At last, update permissions
+      chown -R $RUNTIME_USER:$RUNTIME_USER $DOWNLOAD_LOCATION
+
+      echo "Configuration finished!"
+    ;;
+    no)
+    echo "Skipping SCANOSS KB configuration..."
+    ;;
+  esac
+
 }
-
 # Main script
 echo "Starting knowledge base installation script..."
 
@@ -62,28 +77,15 @@ while true; do
     echo
     echo "SCANOSS KB Installation Menu"
     echo "------------------------"
-    echo "1) Install SCANOSS KB on background (tmux required)"
-    echo "2) Install SCANOSS KB on this session"
-    echo "3) Quit"
-    echo
-    read -p "Enter your choice [1-3]: " kb_choice
+    echo "1) Install SCANOSS KB "
+    echo "2) Quit"
+    read -p "Enter your choice [1-2]: " kb_choice
 
     case $kb_choice in
         1)
-            if ! command -v tmux &> /dev/null; then
-              echo "tmux is not installed but required for background installation"
-            else
-              read -p "Enter your tmux session name: " tmux_session
-              tmux new-session -d -s "$tmux_session" "source ./config.sh; $(declare -f download_kb); download_kb"
-              echo "Background task started in tmux session '$tmux_session'"
-              echo "You can attach to it with: tmux attach -t '$tmux_session'"
-              echo "Feel free to exit this script on the main session"
-            fi
-            ;;
-        2)
             download_kb
             ;;    
-        3)
+        2)
             echo "Exiting script..."
             exit 0
             ;;
