@@ -332,7 +332,6 @@ function install_application {
 function create_scanoss_user {
 
     # Makes sure the scanoss user exists
-
     if ! getent passwd $RUNTIME_USER > /dev/null ; then
     echo "Runtime user does not exist: $RUNTIME_USER"
     read -p "Do you want to create the user $RUNTIME_USER (y/abort) [abort]? " -n 1 -r
@@ -353,7 +352,6 @@ function create_scanoss_user {
         exit 1
     fi
 fi
-
 }
 
 # Main script
@@ -384,10 +382,9 @@ while true; do
     echo "3) Setup SFTP Credentials"
     echo "4) Download Application"
     echo "5) Install Application"
-    echo "6) Verify installation"
-    echo "7) Quit"
+    echo "6) Quit"
     echo
-    read -p "Enter your choice [1-7]: " choice
+    read -p "Enter your choice [1-6]: " choice
 
     case $choice in
         1)
@@ -396,7 +393,6 @@ while true; do
             setup_sftp
             download_application
             install_application
-            # PLACEHOLDER FOR TESTING INSTALLATION
             ;;
         2)
             install_dependencies
@@ -412,9 +408,6 @@ while true; do
             install_application
             ;;
         6)
-            # PLACHOLDER FOR TESTING INSTALLATION
-            ;;
-        7)
             echo "Exiting script..."
             exit 0
             ;;
