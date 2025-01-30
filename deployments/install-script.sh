@@ -169,6 +169,11 @@ function install_application {
                 dnf -y install "$APP_DIR/dependencies/libsodium/" 
             fi
         fi
+        
+        log "Finished installing application dependencies"
+
+        echo "Application dependency installation was succesful!"
+    
     }
 
   installDpkg() {

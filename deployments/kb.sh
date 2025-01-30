@@ -44,7 +44,7 @@ function download_kb () {
 
       echo "Configuration finished!"
     ;;
-    no)
+    "no")
     echo "Skipping SCANOSS KB configuration..."
     ;;
   esac
