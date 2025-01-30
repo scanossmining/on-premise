@@ -12,37 +12,28 @@ function verify_installation() {
     }
 
     service_status {
-    
+
+        echo "Checking service status.."
+
     }
 
     service_metrics {
-    
+
+        echo "Checking service metrics.."
+
     }
 
-    select DECISION in "" "Install application dependencies" "Engine" "ldb" "API" "Encoder" "Quit"
+    select DECISION in "Verify scanning feature" "Check API service status" "Check API service metrics" "Quit"
         do
-            case $application in 
-                "Install all applications and application dependencies")
-                    install_application_dependencies
-                    installDpkg "engine"
-                    installDpkg "ldb"
-                    installApi
-                    installEncoderLib
+            case $DECISION in 
+                "Verify scanning feature")
+                    scan_file
                     ;;
-                "Install application dependencies")
-                    install_application_dependencies 
+                "Check API service status")
+                    service_status 
                     ;;
-                "Engine")
-                    installDpkg "engine"
-                    ;;
-                "ldb")
-                    installDpkg "ldb"
-                    ;;
-                "API")
-                    installApi
-                    ;;
-                "Encoder")
-                    installEncoderLib
+                "Check API service metrics")
+                    service_metrics
                     ;;
                 "Quit")
                     echo "Exiting..."
@@ -53,8 +44,5 @@ function verify_installation() {
                     ;;
             esac
         done
-    ;;
-    esac 
-
 
 }
