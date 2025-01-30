@@ -22,30 +22,31 @@ The following is recommended for running the SCANOSS Applications and SCANOSS KB
 
 - install-script.sh: bash script for installing SCANOSS (SFTP user setup creation, dependencies installation and application download/install)
 - kb.sh: bash script for installing the SCANOSS KB
+- test.sh: bash script for verifying the correct installation of SCANOSS and the SCANOSS KB
 - config.sh: configuration file
 
 # Step-by-step
 
-** Preparing the environment **
+## Preparing the environment 
 
 After receiving the email from our Sales team containing this repository's contents as well as the credentials to access our SFTP server, you will have everything needed to begin installing SCANOSS.
 
 Make sure the scripts have execution permissions, if not add them with the following command:
 
 ```
-  chmod -R +x <folder_containing_scripts>
+chmod -R +x <folder_containing_scripts>
 ```
 
 Another thing to keep in my mind is that this script needs to be run as root, either using ```sudo``` or directly as the root user.
 
-** Installing SCANOSS with install-script.sh **
+## Installing SCANOSS with install-script.sh
 
 The first script you'll need to run is ``install-script.sh``, this script will take care of setting up your SFTP credentials, installing system/application dependencies and downloading/installing SCANOSS applications.
 
 To run the command type:
 
 ```
-  ./install-script.sh
+./install-script.sh
 ```
 
 You will be prompted with the following menu:
@@ -76,14 +77,14 @@ In some cases, users may prefer to manually trigger each step and maybe skipping
 
 > **_Note:_**  During the script, you will also be prompted for setting up installation paths and so on. We recommend using the default values for most options, this will make it easier for debugging if needed.
 
-** Installing the SCANOSS Knowledge Base **
+## Installing the SCANOSS Knowledge Base
 
 When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB installation script ```kb.sh```.
 
 To run the command type:
 
 ```
-  ./kb.sh
+./kb.sh
 ```
 
 After executing the script, you will be prompted with the following menu
@@ -106,5 +107,10 @@ For users wanting to install the SCANOSS KB on the background, we recommend usin
 4. Run the ```kb.sh``` script inside of the tmux session, and begin installing the SCANOSS KB
 5. After triggering the installation you can dettach from the session by pressing ```Ctrl+B``` and then ```d```, and attach again by using ```tmux attach -t mysession```
 
+## Verifying installation
+
+After running ```install.sh``` and ```kb.sh```, you will have installed everything you need to run SCANOSS.
+
+The only thing left to do is verifying everything is functioning properly, and for that we will be using the ```test.sh```  script.
 
 
