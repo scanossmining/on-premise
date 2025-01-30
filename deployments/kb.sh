@@ -7,9 +7,18 @@ source ./config.sh
 
 function download_kb () {
 
-  # Add commands to install application here
-  read -p "Download SCANOSS KB (y/abort) [abort]? " -n 1 -r
-  echo
+  local KB=$1
+
+  if [ $KB = Test ]; then
+    REMOTE_LDB_LOCATION="/ldb/test-compressed/full/latest/oss/"
+    read -p "Download $KB KB (y/abort) [abort]? " -n 1 -r
+    echo
+  elif [ $KB = SCANOSS ]; then
+    read -p "Download $KB KB (y/abort) [abort]? " -n 1 -r
+    echo
+    
+  fi
+
   if [[ $REPLY =~ ^[Yy]$ ]] ; then
     echo "Preparing download..."
   else
@@ -18,16 +27,16 @@ function download_kb () {
   fi
 
   # Confirm LDB download directory
-  read -p "Enter the directory where to download the KB (default: $LDB_LOCATION): " DOWNLOAD_LOCATION
+  read -p "Enter the directory where to download the $KB KB (default: $LDB_LOCATION): " DOWNLOAD_LOCATION
   DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION:-$LDB_LOCATION}
 
   log "Downloading $REMOTE_LDB_LOCATION KB to $DOWNLOAD_LOCATION..."
 
   lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $REMOTE_LDB_LOCATION $DOWNLOAD_LOCATION/oss; exit" sftp://sftp.scanoss.com:49322
   
-  echo "SCANOSS KB installation successful!"
+  echo " $KB KB installation successful!"
 
-  read -p "Configure SCANOSS KB permissions and directories on this server (yes/no): " END_USER
+  read -p "Configure $KB KB permissions and directories on this server (yes/no): " END_USER
   END_USER_LOWER=$(echo "$END_USER" | tr '[:upper:]' '[:lower:]') 
     
   case "$END_USER" in 
@@ -45,7 +54,7 @@ function download_kb () {
       echo "Configuration finished!"
     ;;
     "no")
-    echo "Skipping SCANOSS KB configuration..."
+    echo "Skipping $KB KB configuration..."
     ;;
   esac
 
@@ -77,14 +86,18 @@ while true; do
     echo
     echo "SCANOSS KB Installation Menu"
     echo "------------------------"
-    echo "1) Install SCANOSS KB "
-    echo "2) Quit"
-    read -p "Enter your choice [1-2]: " kb_choice
+    echo "1) Install SCANOSS KB"
+    echo "2) Install Test KB"
+    echo "3) Quit"
+    read -p "Enter your choice [1-3]: " kb_choice
 
     case $kb_choice in
         1)
-            download_kb
-            ;;    
+            download_kb "SCANOSS"
+            ;;
+        1)
+            download_kb "Test"
+            ;;     
         2)
             echo "Exiting script..."
             exit 0
