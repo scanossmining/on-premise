@@ -155,24 +155,24 @@ function install_application {
             if dpkg -l | grep -q "libssl1.1"; then
                 log "libssl1.1 is already installed"
             else
-                dpkg -i "$dependency_package_path/debian/libssl1.1_1.1.1w-0+deb11u1_amd64.deb" 
+                dpkg -i "$dependency_package_path/debian/libssl1.1"*"amd64.deb"
             fi
         elif [ $OS = "CentOS" ]; then
             if dnf list installed | grep -q "libsodium"; then
                 log "libsodium is already installed via package manager"
             else
-                tar -xzvf "$dependency_package_path/centos/libsodium-1.0.18-stable.tar.gz"
+                tar -xzvf "$dependency_package_path/centos/libsodium"*"tar.gz"
                 cd "$dependency_package_path/centos/libsodium-stable"
                 ./configure
                 make && make check
                 make install
-                dnf -y install "$APP_DIR/dependencies/libsodium/" 
+                dnf -y install "$APP_DIR/dependencies/libsodium/"* 
             fi
         fi
         
         log "Finished installing application dependencies"
 
-        echo "Application dependency installation was succesful!"
+        echo "Finished installing application dependencies"
     
     }
 
@@ -252,8 +252,10 @@ function install_application {
     if [ -f "$APP_DIR/scanoss-encoder/$VERSION/libscanoss_encoder.so" ]; then
         cp "$APP_DIR/scanoss-encoder/$VERSION/libscanoss_encoder.so" /usr/lib/libscanoss_encoder.so
         ldconfig
+        echo "scanoss-encoder installed succesfully!"
     else
         log "Library file libscanoss_encoder.so not found."
+        echo "libscanoss_encoder.so not found."
     fi
   }
 

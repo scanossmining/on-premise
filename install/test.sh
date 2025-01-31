@@ -11,7 +11,7 @@ function verify_installation() {
 
         echo "Performing a scan..."
 
-        cd /resources
+        cd "$(pwd)"/resources
 
         curl -X POST -F "file=@$TEST_FILE_NAME" localhost:5443/scan/direct
     
