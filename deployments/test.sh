@@ -11,7 +11,9 @@ function verify_installation() {
 
         echo "Performing a scan..."
 
-        curl -X POST -F "file=@$TEST_FILE_PATH" localhost:5443/scan/direct 
+        cd /resources
+
+        curl -X POST -F "file=@$TEST_FILE_NAME" localhost:5443/scan/direct
     
 
     }
@@ -22,7 +24,6 @@ function verify_installation() {
 
         curl -X GET  http://localhost:5443/health-check
 
-        curl --head  http://localhost:5443/health-check
 
     }
 
@@ -58,6 +59,10 @@ function verify_installation() {
 }
 
 echo "Starting verification script for SCANOSS"
+echo ""
+
+
 echo "Select options from the menu to verify different aspects of your environment"
+echo "----------------------------------------------------------------------------"
 
 verify_installation

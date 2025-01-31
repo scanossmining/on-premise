@@ -22,7 +22,7 @@ SCANOSS_SFTP_PASSWORD=""
 OS=""
 
 #
-TEST_FILE_PATH=""
+TEST_FILE_NAME="file_match.wfp"
 
 function log {
   local MESSAGE=$1

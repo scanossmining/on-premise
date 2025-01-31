@@ -4,7 +4,7 @@
 
 This document aims to guide users through the process of installing SCANOSS for on-premise environments.
 
-This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder) and dependencies.
+This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies and verifying a correct installation of every component.
 
 # Hardware requisites
 
@@ -23,6 +23,7 @@ The following is recommended for running the SCANOSS Applications and SCANOSS KB
 - install-script.sh: bash script for installing SCANOSS (SFTP user setup creation, dependencies installation and application download/install)
 - kb.sh: bash script for installing the SCANOSS KB
 - test.sh: bash script for verifying the correct installation of SCANOSS and the SCANOSS KB
+- /resources: directory containing files for testing the installation of SCANOSS and the SCANOSS KB
 - config.sh: configuration file
 
 # Step-by-step
@@ -113,4 +114,39 @@ After running ```install.sh``` and ```kb.sh```, you will have installed everythi
 
 The only thing left to do is verifying everything is functioning properly, and for that we will be using the ```test.sh```  script.
 
+Before running this script, make sure the ```/resources``` folder has read permissions, if not add them with:
 
+```
+chmod -R +r /resources
+```
+
+To run the command type:
+
+```
+./test.sh
+```
+
+After executing the script, you will be prompted with the following menu
+
+```
+Starting verification script for SCANOSS...
+
+Select options from the menu to verify different aspects of your environment
+----------------------------------------------------------------------------
+1) Verify scanning feature
+2) Check API service status
+3) Check API service metrics
+4) Quit
+```
+
+The output to look for would be the following:
+
+- For the ```Verify scanning feature``` option, you will get a file called ```scan_results.json```. Make sure the file is showing a file match for the test file located on the ```/resources``` folder.
+- For the ```Check API service status``` you should get ```{"alive"}: true``` as a response.
+- And, for the ```Check API service metrics``` you should get the number of requests, performed scans and so on.
+
+After verifying every part of SCANOSS is working, the installation process would be finished
+
+# Support
+
+If you encounter any issues with the scripts or have any questions, feel free to get in touch with us through the channels provided by the sales team.
