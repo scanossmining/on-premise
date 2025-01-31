@@ -21,6 +21,9 @@ SCANOSS_SFTP_PASSWORD=""
 # System information
 OS=""
 
+#
+TEST_FILE_PATH=""
+
 function log {
   local MESSAGE=$1
   echo "$(date +'%Y-%m-%d %H:%M:%S') - $MESSAGE" >> $LOG_FILE
