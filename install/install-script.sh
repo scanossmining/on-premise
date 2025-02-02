@@ -170,9 +170,9 @@ function install_application {
             fi
         fi
         
-        log "Finished installing application dependencies"
+        log "Finished installing dependencies"
 
-        echo "Finished installing application dependencies"
+        echo "Finished installing dependencies"
     
     }
 
@@ -261,20 +261,20 @@ function install_application {
 
   case "$OS" in
     "Debian")
-    select application in "Install all applications and application dependencies" "Install application dependencies" "Engine" "ldb" "API" "Encoder" "Quit"
+    select application in "Install all applications and dependencies" "Install dependencies" "engine" "ldb" "API" "encoder" "Quit"
         do
             case $application in 
-                "Install all applications and application dependencies")
+                "Install all applications and dependencies")
                     install_application_dependencies
                     installDpkg "engine"
                     installDpkg "ldb"
                     installApi
                     installEncoderLib
                     ;;
-                "Install application dependencies")
+                "Install dependencies")
                     install_application_dependencies 
                     ;;
-                "Engine")
+                "engine")
                     installDpkg "engine"
                     ;;
                 "ldb")
@@ -283,7 +283,7 @@ function install_application {
                 "API")
                     installApi
                     ;;
-                "Encoder")
+                "scanoss-encoder")
                     installEncoderLib
                     ;;
                 "Quit")
@@ -297,7 +297,7 @@ function install_application {
         done
     ;;
     "CentOS")
-      select application in "Install all applications" "Install application dependencies" "Engine" "ldb" "API" "Encoder" "Quit"
+      select application in "Install all applications and dependencies" "Install dependencies" "engine" "ldb" "API" "scanoss-encoder" "Quit"
         do
             case $application in 
                 "Install all applications and application dependencies")
@@ -307,10 +307,10 @@ function install_application {
                     installApi
                     installEncoderLib
                     ;;
-                "Install application dependencies")
+                "Install dependencies")
                     install_application_dependencies 
                     ;;
-                "Engine")
+                "engine")
                     installRpm "engine"
                     ;;
                 "ldb")
@@ -319,7 +319,7 @@ function install_application {
                 "API")
                     installApi
                     ;;
-                "Encoder")
+                "scanoss-encoder")
                     installEncoderLib
                     ;;
                 "Quit")
