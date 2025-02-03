@@ -78,6 +78,28 @@ In some cases, users may prefer to manually trigger each step and maybe skipping
 
 > **_Note:_**  During the script, you will also be prompted for setting up installation paths and so on. We recommend using the default values for most options, this will make it easier for debugging if needed.
 
+### API service startup
+
+By default, the script doesn't start the API service, in order to start it run the following command:
+
+```
+systemctl start scanoss-go-api.service
+```
+
+To check the status of the service run
+
+```
+systemctl status scanoss-go-api.service
+```
+
+And to stop the service run:
+
+```
+systemctl stop scanoss-go-api.service
+```
+
+> **_Note:_** You may need to run this commands with ```sudo <command>```, depending on your environment configuration.
+
 ### API Configuration
 
 In case you want to modify the configuration of the API service, the configuration file will be located in ```/opt/scanoss/tmp/scripts/app-config-prod.json``` (defined by the APP_DIR variable in ```config.sh```).
