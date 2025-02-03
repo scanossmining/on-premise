@@ -100,7 +100,7 @@ function setup_sftp {
   echo "$SCANOSS_SFTP_PASSWORD" > ~/.sshpass
   chmod 600 ~/.sshpass
 
-  echo "ls" | sshpass -f ~/.sshpass sftp -P 49322  "$SCANOSS_SFTP_USER"@sftp.scanoss.com 
+  echo "ls" | sshpass -f ~/.sshpass sftp -o "StrictHostKeyChecking=no" -P 49322  "$SCANOSS_SFTP_USER"@sftp.scanoss.com 
 
   echo "Connection succesful!"
 
