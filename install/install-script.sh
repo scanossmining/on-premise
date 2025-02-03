@@ -386,7 +386,7 @@ while true; do
     echo
     echo "SCANOSS Installation Menu"
     echo "------------------------"
-    echo "1) Install SCANOSS Platform"
+    echo "1) Install everything"
     echo "2) Install Dependencies"
     echo "3) Setup SFTP Credentials"
     echo "4) Download Application"
