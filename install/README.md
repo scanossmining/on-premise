@@ -20,11 +20,11 @@ The following is recommended for running the SCANOSS Applications and SCANOSS KB
 
 # Contents of this repository
 
-- install-script.sh: bash script for installing SCANOSS (SFTP user setup creation, dependencies installation and application download/install)
-- kb.sh: bash script for installing the SCANOSS KB
-- test.sh: bash script for verifying the correct installation of SCANOSS and the SCANOSS KB
-- /resources: directory containing files for testing the installation of SCANOSS and the SCANOSS KB
-- config.sh: configuration file
+- [install-scanoss.sh](./install-scanoss.sh): bash script for installing SCANOSS (SFTP user setup creation, dependencies installation and application download/install)
+- [kb.sh](./kb.sh): bash script for installing the SCANOSS KB
+- [test.sh](./test.sh): bash script for verifying the correct installation of SCANOSS and the SCANOSS KB
+- [resources](/resources): directory containing files for testing the installation of SCANOSS and the SCANOSS KB
+- [config.sh](./config.sh): configuration file
 
 # Step-by-step
 
@@ -40,14 +40,14 @@ chmod -R +x <folder_containing_scripts>
 
 Another thing to keep in my mind is that this script needs to be run as root, either using ```sudo``` or directly as the root user.
 
-## Installing SCANOSS with install-script.sh
+## Installing SCANOSS with install-scanoss.sh
 
-The first script you'll need to run is ``install-script.sh``, this script will take care of setting up your SFTP credentials, installing system/application dependencies and downloading/installing SCANOSS applications.
+The first script you'll need to run is ``install-scanoss.sh``, this script will take care of setting up your SFTP credentials, installing system/application dependencies and downloading/installing SCANOSS applications.
 
 To run the command type:
 
 ```
-./install-script.sh
+./install-scanoss.sh
 ```
 
 You will be prompted with the following menu:
@@ -106,7 +106,7 @@ In case you want to modify the configuration of the API service, the configurati
 
 Inside the configuration file, you will see multiple options such as app information, logging, telemetry, networking, TLS encryption and filtering. All the available configuration options are already present in the file, though some may be empty.
 
-To restart the service with the new options you added/modified, run the ```install-script.sh``` choose option 5) Install Application and then option 5) API, and the service will update with the new configuration.
+To restart the service with the new options you added/modified, run the ```install-scanoss.sh``` choose option 5) Install Application and then option 5) API, and the service will update with the new configuration.
 
 ## Installing the SCANOSS Knowledge Base
 
