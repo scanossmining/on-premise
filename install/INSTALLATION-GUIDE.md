@@ -78,6 +78,14 @@ In some cases, users may prefer to manually trigger each step and maybe skipping
 
 > **_Note:_**  During the script, you will also be prompted for setting up installation paths and so on. We recommend using the default values for most options, this will make it easier for debugging if needed.
 
+### API Configuration
+
+In case you want to modify the configuration of the API service, the configuration file will be located in ```/opt/scanoss/tmp/scripts/app-config-prod.json``` (defined by the APP_DIR variable in ```config.sh```).
+
+Inside the configuration file, you will see multiple options such as app information, logging, telemetry, networking, TLS encryption and filtering. All the available configuration options are already present in the file, though some may be empty.
+
+To restart the service with the new options you added/modified, run the ```install-script.sh``` choose option 5) Install Application and then option 5) API, and the service will update with the new configuration.
+
 ## Installing the SCANOSS Knowledge Base
 
 When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB installation script ```kb.sh```.
