@@ -57,7 +57,7 @@ Starting scanoss installation script...
 
 SCANOSS Installation Menu
 ------------------------
-1) Install SCANOSS Platform
+1) Install everything
 2) Install Dependencies
 3) Setup SFTP Credentials
 4) Download Application
@@ -67,7 +67,7 @@ SCANOSS Installation Menu
 Enter your choice [1-6]:
 ```
 
-The first option ```Install SCANOSS Platform``` includes all other options, that means that this option will install system dependencies (based on the host machine OS), setup your SFTP user credentials (for pulling the application packages from our SFTP server, and in ```kb.sh``` pulling the SCANOSS KB), download application packages and installing SCANOSS applications.
+The first option ```Install everything``` includes all other options, that means that this option will install system dependencies (based on the host machine OS), setup your SFTP user credentials (for pulling the application packages from our SFTP server, and in ```kb.sh``` pulling the SCANOSS KB), download application packages and installing SCANOSS applications.
 
 In some cases, users may prefer to manually trigger each step and maybe skipping one (e.g. users who may want to download packages from one computer, and installing them in another). So if you are in this situation, the correct workflow for manual trigger of options would be:
 
