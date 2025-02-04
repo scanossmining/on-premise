@@ -35,7 +35,7 @@ After receiving the email from our Sales team containing this repository's conte
 Make sure the scripts have execution permissions, if not add them with the following command:
 
 ```
-chmod -R +x <folder_containing_scripts>
+chmod -R +x <scripts-folder>/*.sh
 ```
 
 Another thing to keep in my mind is that this script needs to be run as root, either using ```sudo``` or directly as the root user.
