@@ -95,15 +95,15 @@ while true; do
         1)
             download_kb "SCANOSS"
             ;;
-        1)
+        2)
             download_kb "Test"
             ;;     
-        2)
+        3)
             echo "Exiting script..."
             exit 0
             ;;
         *)
-            echo "Invalid option. Please enter a number between 1-4."
+            echo "Invalid option. Please enter a number between 1-3."
             ;;
     esac
 done
