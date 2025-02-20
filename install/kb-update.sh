@@ -25,7 +25,9 @@ function kb_update() {
                     if ((LOCAL_SIZE > REMOTE_SIZE)); then
                         echo "Downloading Knowledge base update..."
                         log "Downloading Knowledge base update..."
-                        lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322                    
+                        lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322
+                        echo "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
+                        log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"                    
                     elif ((LOCAL_SIZE <= REMOTE_SIZE )); then
                         echo "Disk space insufficient on $LOCAL_SIZE"
                         log "Disk space insufficient on $LOCAL_SIZE"
@@ -41,9 +43,6 @@ function kb_update() {
                     echo "Please answer yes (y) or no (n).";;
             esac
     done
-        
-    echo "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
-    log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
 
     while true; do
             read -p "Do you wish to proceed with the update import? (y/n) " yn
