@@ -34,7 +34,7 @@ function kb_update() {
                     echo "Please answer yes (y) or no (n).";;
             esac
         done 
-    elif ((LOCAL_SIZE <= REMOTE_SIZE )) 
+    elif ((LOCAL_SIZE <= REMOTE_SIZE )); then
         echo "Disk space insufficient on $LOCAL_SIZE"
         log "Disk space insufficient on $LOCAL_SIZE"
         echo "Exiting script..."
@@ -63,7 +63,7 @@ function kb_update() {
 
                     echo 'bulk insert oss from /data/scanoss_kb_updates/25.02/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
 
-                    else
+                    else; then
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
                         log "Disk space insufficient on $LDB_DISK_SPACE"
                         echo "Exiting script..."
