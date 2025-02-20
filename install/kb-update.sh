@@ -14,35 +14,33 @@ KB_LOCATION="$LDB_LOCATION" # LOCATION OF THE LDB, MIGHT BE CUSTOM SO GIVE THE O
 
 function kb_update() {
 
-    echo "Checking for free disk space on $UPDATE_DOWNLOAD"
-    log "Checking for free disk space on $UPDATE_DOWNLOAD"
-
-    REMOTE_SIZE=$(echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk -v version="$KB_VERSION" '/^[dl]/ && $9 ~ version {print 120*1024*1024*1024}')
-
-    LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD" | awk 'NR==2 {print $4}')
-
-    if ((LOCAL_SIZE > REMOTE_SIZE)); then
-        while true; do
+    while true; do
             read -p "Do you want to proceed with the download? (y/n) " yn
             case $yn in
                 [Yy]* )
-                    echo "Downloading Knowledge base update..."
-                    log "Downloading Knowledge base update..."
-                    lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322
+                    echo "Checking for free disk space on $UPDATE_DOWNLOAD"
+                    log "Checking for free disk space on $UPDATE_DOWNLOAD"
+                    REMOTE_SIZE=$(echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk -v version="$KB_VERSION" '/^[dl]/ && $9 ~ version {print 120*1024*1024*1024}')
+                    LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD" | awk 'NR==2 {print $4}')
+                    if ((LOCAL_SIZE > REMOTE_SIZE)); then
+                        echo "Downloading Knowledge base update..."
+                        log "Downloading Knowledge base update..."
+                        lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322                    
+                    elif ((LOCAL_SIZE <= REMOTE_SIZE )); then
+                        echo "Disk space insufficient on $LOCAL_SIZE"
+                        log "Disk space insufficient on $LOCAL_SIZE"
+                        echo "Exiting script..."
+                        exit 1
+                    fi
                     ;;
                 [Nn]* ) 
                     echo "Skipping knowledge base update download..."
+                    break
                     ;;
                 * ) 
                     echo "Please answer yes (y) or no (n).";;
             esac
-        done 
-    elif ((LOCAL_SIZE <= REMOTE_SIZE )); then
-        echo "Disk space insufficient on $LOCAL_SIZE"
-        log "Disk space insufficient on $LOCAL_SIZE"
-        echo "Exiting script..."
-        exit 1
-    fi
+    done
         
     echo "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
     log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
@@ -77,7 +75,7 @@ function kb_update() {
                     ;;
                 [Nn]* ) 
                     echo "Exiting knowledge base setup..."
-                    exit 0
+                    break
                     ;;
                 * ) 
                     echo "Please answer yes (y) or no (n).";;
