@@ -8,6 +8,8 @@ KB_VERSION="latest"
 UPDATE_DOWNLOAD=""
 BASE_REMOTE_PATH=""
 UPDATE_FREQUENCY=""
+FULL_REMOTE_PATH=""
+KB_LOCATION="$LDB_LOCATION"
 
 
 function kb_update() {
@@ -17,7 +19,7 @@ function kb_update() {
 
     REMOTE_SIZE=$(echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk -v version="$KB_VERSION" '/^[dl]/ && $9 ~ version {print 120*1024*1024*1024}')
 
-    LOCAL_SIZE=$(df -B1 /data | awk 'NR==2 {print $4}')
+    LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD/$KB_VERSION" | awk 'NR==2 {print $4}')
 
     if ((LOCAL_SIZE >= REMOTE_SIZE)); then
         while true; do
@@ -26,7 +28,7 @@ function kb_update() {
                 [Yy]* )
                     echo "Downloading Knowledge base update..."
                     log "Downloading Knowledge base update..."
-                    lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION $DOWNLOAD_LOCATION; exit" sftp://sftp.scanoss.com:49322
+                    lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $DOWNLOAD_LOCATION; exit" sftp://sftp.scanoss.com:49322
                     ;;
                 [Nn]* ) 
                     echo "Skipping knowledge base update download..."
@@ -51,7 +53,7 @@ function kb_update() {
             case $yn in
                 [Yy]* )
 
-                    read -p "Enter the directory where to import the update (default: $LDB_LOCATION): " KB_LOCATION
+                    read -p "Enter the directory where to import the update (default: $KB_LOCATION): " KB_LOCATION
 
                     echo "Checking for free disk space on $KB_LOCATION"
 
@@ -60,10 +62,10 @@ function kb_update() {
 
                     if ((LDB_DISK_SPACE >= UPDATE_SIZE )) ; then
 
-                    echo "Importing $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION to $KB_LOCATION..."
-                    log "Importing $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION to $KB_LOCATION..."
+                    echo "Importing $DOWNLOAD_LOCATION/$KB_VERSION to $KB_LOCATION..."
+                    log "Importing $DOWNLOAD_LOCATION/$KB_VERSION to $KB_LOCATION..."
 
-                    echo 'bulk insert oss from /data/scanoss_kb_updates/25.02/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
+                    echo 'bulk insert oss from $DOWNLOAD_LOCATION/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
@@ -126,7 +128,9 @@ echo
 
 read -p "Enter the knowledge base version (default: latest): " KB_VERSION
 
-read -p "Enter the download directory location (default: $UPDATE_DOWNLOAD): " UPDATE_DOWNLOAD
+FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
+
+read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD
 
 mkdir -p "$UPDATE_DOWNLOAD/$KB_VERSION"
 
