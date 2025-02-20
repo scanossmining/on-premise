@@ -21,7 +21,7 @@ function kb_update() {
 
     LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD" | awk 'NR==2 {print $4}')
 
-    if ((LOCAL_SIZE >= REMOTE_SIZE)); then
+    if ((LOCAL_SIZE > REMOTE_SIZE)); then
         while true; do
             read -p "Do you want to proceed with the download? (y/n) " yn
             case $yn in
@@ -57,10 +57,10 @@ function kb_update() {
 
                     echo "Checking for free disk space on $KB_LOCATION"
 
-                    UPDATE_SIZE=$(du -sb "$UPDATE_DOWNLOAD/$KB_VERSION" | awk '{print $1}')
-                    LDB_DISK_SPACE=$(df -sb "$LDB_LOCATION" | awk '{print $1}')
+                    UPDATE_SIZE=$(df -B1 "$UPDATE_DOWNLOAD/$KB_VERSION" | awk 'NR==2 {print $4}')
+                    LDB_DISK_SPACE=$(df -B1 "$KB_LOCATION" | awk 'NR==2 {print $4}')
                     
-                    if ((LDB_DISK_SPACE >= UPDATE_SIZE )) ; then
+                    if ((LDB_DISK_SPACE > UPDATE_SIZE )) ; then
 
                     echo "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
                     log "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
@@ -131,7 +131,7 @@ KB_VERSION=${KB_VERSION_INPUT:-$KB_VERSION}
 
 FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
 
-read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD
+read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD # enter directory with closing / so it creates a directory with the name of the kb update version
 
 mkdir -p "$UPDATE_DOWNLOAD"
 
