@@ -32,7 +32,6 @@ function kb_update() {
                     ;;
                 [Nn]* ) 
                     echo "Skipping knowledge base update download..."
-                    break
                     ;;
                 * ) 
                     echo "Please answer yes (y) or no (n).";;
@@ -53,19 +52,20 @@ function kb_update() {
             case $yn in
                 [Yy]* )
 
-                    read -p "Enter the directory where to import the update (default: $KB_LOCATION): " KB_LOCATION
+                    read -p "Enter the directory where to import the update (default: $KB_LOCATION): " KB_LOCATION_INPUT
+                    KB_LOCATION=${KB_LOCATION_INPUT:-$KB_LOCATION}
 
                     echo "Checking for free disk space on $KB_LOCATION"
 
-                    LDB_DISK_SPACE=$(du -sb "$LDB_LOCATION" | awk '{print $1}')
                     UPDATE_SIZE=$(du -sb "$UPDATE_DOWNLOAD/$KB_VERSION" | awk '{print $1}')
-
+                    LDB_DISK_SPACE=$(df -sb "$LDB_LOCATION" | awk '{print $1}')
+                    
                     if ((LDB_DISK_SPACE >= UPDATE_SIZE )) ; then
 
                     echo "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
                     log "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
 
-                    echo 'bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
+                    echo "bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)" | ldb
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
@@ -126,7 +126,8 @@ echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(
 echo "-------------------"
 echo 
 
-read -p "Enter the knowledge base version (default: latest): " KB_VERSION
+read -p "Enter the knowledge base version (default: latest): " KB_VERSION_INPUT
+KB_VERSION=${KB_VERSION_INPUT:-$KB_VERSION}
 
 FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
 
