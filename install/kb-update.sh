@@ -63,7 +63,7 @@ function kb_update() {
 
                     echo 'bulk insert oss from /data/scanoss_kb_updates/25.02/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
 
-                    else; then
+                    else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
                         log "Disk space insufficient on $LDB_DISK_SPACE"
                         echo "Exiting script..."
@@ -98,12 +98,15 @@ while true; do
             case $UPDATE_FREQUENCY in
                 daily)
                     UPDATE_FREQUENCY="daily"
+                    break
                     ;;
                 monthly) 
                     UPDATE_FREQUENCY="monthly"
+                    break
                     ;;
                 quarterly)
                     UPDATE_FREQUENCY="quarterly"
+                    break
                     ;;
                 * ) 
                     echo "Please answer a valid option (daily/monthly/quarterly).";;
