@@ -116,7 +116,7 @@ done
 echo "Available versions: "
 echo "-------------------"
 
-lftp -c "open -u \"$(cat ~/.ssh_user):$(cat ~/.sshpass)\"; find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'"
+lftp -c "open -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)"; find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'"
 
 echo "-------------------"
 
