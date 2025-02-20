@@ -21,7 +21,7 @@ SCANOSS_SFTP_PASSWORD=""
 # System information
 OS=""
 
-#
+# Installation testing
 TEST_FILE_NAME="file_match.wfp"
 
 function log {
