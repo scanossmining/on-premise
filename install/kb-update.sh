@@ -15,9 +15,9 @@ function kb_update() {
     echo "Checking for free disk space on $UPDATE_DOWNLOAD"
     log "Checking for free disk space on $UPDATE_DOWNLOAD"
 
-    REMOTE_SIZE=$(lftp -c "open -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)"; du -bs $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION" | cut -f1)
+    REMOTE_SIZE=$(echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk -v version="$KB_VERSION" '/^[dl]/ && $9 ~ version {print 120*1024*1024*1024}')
 
-    LOCAL_SIZE=$(du -sb "$UPDATE_DOWNLOAD" | awk '{print $1}')
+    LOCAL_SIZE=$(df -B1 /data | awk 'NR==2 {print $4}')
 
     if ((LOCAL_SIZE >= REMOTE_SIZE)); then
         while true; do
@@ -30,6 +30,7 @@ function kb_update() {
                     ;;
                 [Nn]* ) 
                     echo "Skipping knowledge base update download..."
+                    break
                     ;;
                 * ) 
                     echo "Please answer yes (y) or no (n).";;
@@ -118,11 +119,10 @@ done
 echo "Available versions: "
 echo "-------------------"
 
-#lftp -c "open -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)"; find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'"
-
-sshpass -f ~/.sshpass lftp -u "$(cat ~/.ssh_user)," sftp://sftp.scanoss.com:49322 -e "find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'; exit"
+echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk '/^[dl]/ {printf "%.1fGB\t%s\n", 120, $9}'
 
 echo "-------------------"
+echo 
 
 read -p "Enter the knowledge base version (default: latest): " KB_VERSION
 
