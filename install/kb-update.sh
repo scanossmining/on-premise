@@ -5,9 +5,8 @@ set -e
 source ./config.sh
 
 KB_VERSION="latest"
-UPDATE_DOWNLOAD="/data/scanoss_kb_updates/"
-CUSTOMER_NAME=""
-BASE_REMOTE_PATH="/ldb/$CUSTOMER_NAME/updates"
+UPDATE_DOWNLOAD=""
+BASE_REMOTE_PATH=""
 UPDATE_FREQUENCY=""
 
 
@@ -93,6 +92,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+read -p "Enter the provided remote knowledge base path: " BASE_REMOTE_PATH
 
 while true; do
             read -p "Enter the knowledge base version date (daily/monthly/quarterly): " UPDATE_FREQUENCY
@@ -118,7 +118,9 @@ done
 echo "Available versions: "
 echo "-------------------"
 
-lftp -c "open -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)"; find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'"
+#lftp -c "open -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)"; find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'"
+
+sshpass -f ~/.sshpass lftp -u "$(cat ~/.ssh_user)," sftp://sftp.scanoss.com:49322 -e "find $BASE_REMOTE_PATH/$UPDATE_FREQUENCY -maxdepth 1 -type d -exec du -BG {} \; | sed 's/G\t.*\//G\t/'; exit"
 
 echo "-------------------"
 
