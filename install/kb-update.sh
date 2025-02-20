@@ -4,12 +4,12 @@ set -e
 
 source ./config.sh
 
-KB_VERSION="latest"
-UPDATE_DOWNLOAD=""
-BASE_REMOTE_PATH=""
-UPDATE_FREQUENCY=""
-FULL_REMOTE_PATH=""
-KB_LOCATION="$LDB_LOCATION"
+KB_VERSION="latest" # KB UPDATE VERSION, latest or else (24.q1)
+UPDATE_DOWNLOAD="" # LOCAL DIRECTORY TO DOWNLOAD UPDATE FOLDER TO
+BASE_REMOTE_PATH="" # e.g. /ldb/customer/updates
+UPDATE_FREQUENCY="" # daily, monthly, quarterly
+FULL_REMOTE_PATH="" # BASE_REMOTE_PATH + UPDATE_FREQUENCY + KB_VERSION
+KB_LOCATION="$LDB_LOCATION" # LOCATION OF THE LDB, MIGHT BE CUSTOM SO GIVE THE OPPORTUNITY TO OVERRIDE DEFAULT FROM config.sh
 
 
 function kb_update() {
@@ -19,7 +19,7 @@ function kb_update() {
 
     REMOTE_SIZE=$(echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY/" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk -v version="$KB_VERSION" '/^[dl]/ && $9 ~ version {print 120*1024*1024*1024}')
 
-    LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD/$KB_VERSION" | awk 'NR==2 {print $4}')
+    LOCAL_SIZE=$(df -B1 "$UPDATE_DOWNLOAD" | awk 'NR==2 {print $4}')
 
     if ((LOCAL_SIZE >= REMOTE_SIZE)); then
         while true; do
@@ -28,7 +28,7 @@ function kb_update() {
                 [Yy]* )
                     echo "Downloading Knowledge base update..."
                     log "Downloading Knowledge base update..."
-                    lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $DOWNLOAD_LOCATION; exit" sftp://sftp.scanoss.com:49322
+                    lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322
                     ;;
                 [Nn]* ) 
                     echo "Skipping knowledge base update download..."
@@ -45,8 +45,8 @@ function kb_update() {
         exit 1
     fi
         
-    echo "KB Update downloaded to $UPDATE_DOWNLOAD"
-    log "KB Update downloaded to $UPDATE_DOWNLOAD"
+    echo "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
+    log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
 
     while true; do
             read -p "Do you wish to proceed with the update import? (y/n) " yn
@@ -58,14 +58,14 @@ function kb_update() {
                     echo "Checking for free disk space on $KB_LOCATION"
 
                     LDB_DISK_SPACE=$(du -sb "$LDB_LOCATION" | awk '{print $1}')
-                    UPDATE_SIZE=$(du -sb "$DOWNLOAD_LOCATION" | awk '{print $1}')
+                    UPDATE_SIZE=$(du -sb "$UPDATE_DOWNLOAD/$KB_VERSION" | awk '{print $1}')
 
                     if ((LDB_DISK_SPACE >= UPDATE_SIZE )) ; then
 
-                    echo "Importing $DOWNLOAD_LOCATION/$KB_VERSION to $KB_LOCATION..."
-                    log "Importing $DOWNLOAD_LOCATION/$KB_VERSION to $KB_LOCATION..."
+                    echo "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
+                    log "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
 
-                    echo 'bulk insert oss from $DOWNLOAD_LOCATION/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
+                    echo 'bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)' | ldb
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
@@ -132,7 +132,7 @@ FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
 
 read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD
 
-mkdir -p "$UPDATE_DOWNLOAD/$KB_VERSION"
+mkdir -p "$UPDATE_DOWNLOAD"
 
 while true; do
     echo
