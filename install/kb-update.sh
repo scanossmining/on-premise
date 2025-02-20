@@ -28,8 +28,7 @@ function kb_update() {
                     lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $BASE_KB_PATH/$UPDATE_FREQUENCY/$KB_VERSION $DOWNLOAD_LOCATION; exit" sftp://sftp.scanoss.com:49322
                     ;;
                 [Nn]* ) 
-                    echo "Aborting..."
-                    exit 1
+                    echo "Skipping knowledge base update download..."
                     ;;
                 * ) 
                     echo "Please answer yes (y) or no (n).";;
@@ -61,6 +60,8 @@ function kb_update() {
 
                     echo "Importing $BASE_KB_PATH/$UPDATE_FREQUENCY/$KB_VERSION to $KB_LOCATION..."
                     log "Importing $BASE_KB_PATH/$UPDATE_FREQUENCY/$KB_VERSION to $KB_LOCATION..."
+
+                    # echo "import command"
 
                     else
                         echo "Disk space insufficient on $KB_SIZE"
