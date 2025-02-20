@@ -6,8 +6,10 @@ source ./config.sh
 
 KB_VERSION="latest"
 UPDATE_DOWNLOAD="/data/scanoss_kb_updates/"
-BASE_REMOTE_PATH="/ldb/compressed/updates"
+CUSTOMER_NAME=""
+BASE_REMOTE_PATH="/ldb/$CUSTOMER_NAME/updates"
 UPDATE_FREQUENCY=""
+
 
 function kb_update() {
 
