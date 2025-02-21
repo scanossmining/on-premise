@@ -14,6 +14,50 @@ KB_LOCATION="$LDB_LOCATION" # LOCATION OF THE LDB, MIGHT BE CUSTOM SO GIVE THE O
 
 function kb_update() {
 
+    ### Configuration
+
+    read -p "Enter the provided remote knowledge base path: " BASE_REMOTE_PATH
+
+    while true; do
+                read -p "Enter the knowledge base version date (daily/monthly/quarterly): " UPDATE_FREQUENCY
+                UPDATE_FREQUENCY=$(echo "$UPDATE_FREQUENCY" | tr '[:upper:]' '[:lower:]')
+                case $UPDATE_FREQUENCY in
+                    daily)
+                        UPDATE_FREQUENCY="daily"
+                        break
+                        ;;
+                    monthly) 
+                        UPDATE_FREQUENCY="monthly"
+                        break
+                        ;;
+                    quarterly)
+                        UPDATE_FREQUENCY="quarterly"
+                        break
+                        ;;
+                    * ) 
+                        echo "Please answer a valid option (daily/monthly/quarterly).";;
+                esac
+    done
+
+    echo "Available versions: "
+    echo "-------------------"
+
+    echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk '/^[dl]/ {printf "%.1fGB\t%s\n", 120, $9}'
+
+    echo "-------------------"
+    echo 
+
+    read -p "Enter the knowledge base version (default: latest): " KB_VERSION_INPUT
+    KB_VERSION=${KB_VERSION_INPUT:-$KB_VERSION}
+
+    FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
+
+    read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD  ### enter path with closing /
+
+    mkdir -p "$UPDATE_DOWNLOAD"
+
+    ### Download
+
     while true; do
             read -p "Do you want to proceed with the download? (y/n) " yn
             case $yn in
@@ -44,6 +88,8 @@ function kb_update() {
             esac
     done
 
+    ### Import
+
     while true; do
             read -p "Do you wish to proceed with the update import? (y/n) " yn
             case $yn in
@@ -62,7 +108,9 @@ function kb_update() {
                     echo "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
                     log "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
 
-                    echo "bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=6,TMP=/data/scanoss_tmp,FILE_DEL=0)" | ldb
+                    read -p "How many threads for importing the KB (1-6): " THREADS
+
+                    echo "bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=/data/scanoss_tmp,FILE_DEL=0)" | ldb
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"
@@ -91,46 +139,6 @@ if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root."
   exit 1
 fi
-
-read -p "Enter the provided remote knowledge base path: " BASE_REMOTE_PATH
-
-while true; do
-            read -p "Enter the knowledge base version date (daily/monthly/quarterly): " UPDATE_FREQUENCY
-            UPDATE_FREQUENCY=$(echo "$UPDATE_FREQUENCY" | tr '[:upper:]' '[:lower:]')
-            case $UPDATE_FREQUENCY in
-                daily)
-                    UPDATE_FREQUENCY="daily"
-                    break
-                    ;;
-                monthly) 
-                    UPDATE_FREQUENCY="monthly"
-                    break
-                    ;;
-                quarterly)
-                    UPDATE_FREQUENCY="quarterly"
-                    break
-                    ;;
-                * ) 
-                    echo "Please answer a valid option (daily/monthly/quarterly).";;
-            esac
-done
-
-echo "Available versions: "
-echo "-------------------"
-
-echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk '/^[dl]/ {printf "%.1fGB\t%s\n", 120, $9}'
-
-echo "-------------------"
-echo 
-
-read -p "Enter the knowledge base version (default: latest): " KB_VERSION_INPUT
-KB_VERSION=${KB_VERSION_INPUT:-$KB_VERSION}
-
-FULL_REMOTE_PATH="$BASE_REMOTE_PATH/$UPDATE_FREQUENCY/$KB_VERSION"
-
-read -p "Enter the download directory location (directories will be created if they don't exist): " UPDATE_DOWNLOAD # enter directory with closing / so it creates a directory with the name of the kb update version
-
-mkdir -p "$UPDATE_DOWNLOAD"
 
 while true; do
     echo
