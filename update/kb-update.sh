@@ -2,7 +2,7 @@
 
 set -e
 
-source ./config.sh
+source ../install/config.sh
 
 KB_VERSION="latest" # KB UPDATE VERSION, latest or else (24.q1)
 UPDATE_DOWNLOAD="" # LOCAL DIRECTORY TO DOWNLOAD UPDATE FOLDER TO
@@ -110,7 +110,9 @@ function kb_update() {
 
                     read -p "How many threads for importing the KB (1-6): " THREADS
 
-                    echo "bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=/data/scanoss_tmp,FILE_DEL=0)" | ldb
+                    # Run import as $RUNTIME_USER (e.g. scanoss)
+
+                    sudo -u $RUNTIME_USER bash -c "echo \"bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=/data/scanoss_tmp,FILE_DEL=0)\" | ldb"
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"

@@ -4,7 +4,7 @@
 
 This document aims to guide users through the process of installing SCANOSS for on-premise environments.
 
-This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies and verifying a correct installation of every component.
+This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies, knowledge base updates and verifying a correct installation of every component.
 
 # Hardware requisites
 
@@ -25,6 +25,7 @@ The following is recommended for running the SCANOSS Applications and SCANOSS KB
 - [test.sh](./test.sh): bash script for verifying the correct installation of SCANOSS and the SCANOSS KB
 - [resources](/resources): directory containing files for testing the installation of SCANOSS and the SCANOSS KB
 - [config.sh](./config.sh): configuration file
+- [kb-update.sh](../update): directory containing the knowledge base update guide and script
 
 # Step-by-step
 
