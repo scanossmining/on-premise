@@ -16,7 +16,6 @@ function download_kb () {
   elif [ $KB = SCANOSS ]; then
     read -p "Download $KB KB (y/abort) [abort]? " -n 1 -r
     echo
-    
   fi
 
   if [[ $REPLY =~ ^[Yy]$ ]] ; then
@@ -29,6 +28,20 @@ function download_kb () {
   # Confirm LDB download directory
   read -p "Enter the directory where to download the $KB KB (default: $LDB_LOCATION): " DOWNLOAD_LOCATION
   DOWNLOAD_LOCATION=${DOWNLOAD_LOCATION:-$LDB_LOCATION}
+
+  # Confirm if LDB folder exists. Create it otherwise.
+  if [ ! -d $DOWNLOAD_LOCATION ]; then
+    mkdir -p $DOWNLOAD_LOCATION
+  fi
+
+  # Check for free space in LDB directory
+  freespace=$(df --output=avail -B1T $LDB_LOCATION | awk 'NR==2 {print $1}')
+  if awk -v freespace="$freespace" -v FREE_SPACE_REQUIRED="$FREE_SPACE_REQUIRED" 'BEGIN { if (freespace > FREE_SPACE_REQUIRED) exit 0; else exit 1 }'; then
+    echo "Free space is over $FREE_SPACE_REQUIRED TB"
+  else
+    echo "Free space is not over $FREE_SPACE_REQUIRED TB"
+    exit 1
+  fi
 
   log "Downloading $REMOTE_LDB_LOCATION KB to $DOWNLOAD_LOCATION..."
 
@@ -65,20 +78,6 @@ echo "Starting knowledge base installation script..."
 # Make sure we're running as root
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root."
-  exit 1
-fi
-
-# Confirm if LDB folder exists. Create it otherwise.
-if [ ! -d $LDB_LOCATION ]; then
-  mkdir -p $LDB_LOCATION
-fi
-
-# Check for free space in LDB directory
-freespace=$(df --output=avail -B1T $LDB_LOCATION | awk 'NR==2 {print $1}')
-if awk -v freespace="$freespace" -v FREE_SPACE_REQUIRED="$FREE_SPACE_REQUIRED" 'BEGIN { if (freespace > FREE_SPACE_REQUIRED) exit 0; else exit 1 }'; then
-  echo "Free space is over $FREE_SPACE_REQUIRED TB"
-else
-  echo "Free space is not over $FREE_SPACE_REQUIRED TB"
   exit 1
 fi
 

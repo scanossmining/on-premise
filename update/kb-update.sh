@@ -10,6 +10,7 @@ BASE_REMOTE_PATH="" # e.g. /ldb/customer/updates
 UPDATE_FREQUENCY="" # daily, monthly, quarterly
 FULL_REMOTE_PATH="" # BASE_REMOTE_PATH + UPDATE_FREQUENCY + KB_VERSION
 KB_LOCATION="$LDB_LOCATION" # LOCATION OF THE LDB, MIGHT BE CUSTOM SO GIVE THE OPPORTUNITY TO OVERRIDE DEFAULT FROM config.sh
+THREADS="4"
 
 
 function kb_update() {
@@ -71,7 +72,10 @@ function kb_update() {
                         log "Downloading Knowledge base update..."
                         lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" -e "mirror -c -e -P 10  $FULL_REMOTE_PATH $UPDATE_DOWNLOAD; exit" sftp://sftp.scanoss.com:49322
                         echo "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
-                        log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"                    
+                        log "KB Update downloaded to $UPDATE_DOWNLOAD/$KB_VERSION"
+                        echo "Updating ownership of $UPDATE_DOWNLOAD"
+                        log "Updating ownership of $UPDATE_DOWNLOAD"
+                        chown -R $RUNTIME_USER:$RUNTIME_USER $UPDATE_DOWNLOAD                    
                     elif ((LOCAL_SIZE <= REMOTE_SIZE )); then
                         echo "Disk space insufficient on $LOCAL_SIZE"
                         log "Disk space insufficient on $LOCAL_SIZE"
@@ -108,10 +112,10 @@ function kb_update() {
                     echo "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
                     log "Importing $UPDATE_DOWNLOAD/$KB_VERSION to $KB_LOCATION..."
 
-                    read -p "How many threads for importing the KB (1-6): " THREADS
+                    read -p "How many threads for importing the KB (1-6)[default: 4]: " THREADS_INPUT
+                    THREADS=${THREADS_INPUT:-$THREADS}
 
                     # Run import as $RUNTIME_USER (e.g. scanoss)
-
                     sudo -u $RUNTIME_USER bash -c "echo \"bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=/data/scanoss_tmp,FILE_DEL=0)\" | ldb"
 
                     else
