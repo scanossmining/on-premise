@@ -372,10 +372,19 @@ function create_scanoss_user {
         exit 1
     fi
 
-
-
-
 fi
+}
+
+function create_ldb_directory {
+
+    read -p "Enter the directory to download the KB: " real_ldb_location
+
+    if [ -L "/path/to/symlink" ]; then
+        echo "Symlink exists"
+    else
+        ln -s $real_ldb_location $LDB_LOCATION
+    fi
+
 }
 
 # Main script
@@ -413,6 +422,7 @@ while true; do
     case $choice in
         1)
             create_scanoss_user
+            create_ldb_directory
             install_dependencies
             setup_sftp
             download_application
@@ -429,6 +439,7 @@ while true; do
             ;;
         5)
             create_scanoss_user
+            create_ldb_directory
             install_application
             ;;
         6)
