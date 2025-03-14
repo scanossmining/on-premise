@@ -13,6 +13,7 @@ VERSION="latest"
 REMOTE_LDB_LOCATION=/ldb/compressed/full/latest/oss/
 FREE_SPACE_REQUIRED="${FREE_SPACE_REQUIRED:-18}"
 LDB_LOCATION=/var/lib/ldb
+TMP_UPDATE=""
 
 # SFTP credentials 
 SCANOSS_SFTP_USER=""

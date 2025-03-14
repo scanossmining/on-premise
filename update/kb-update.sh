@@ -115,8 +115,12 @@ function kb_update() {
                     read -p "How many threads for importing the KB (1-6)[default: 4]: " THREADS_INPUT
                     THREADS=${THREADS_INPUT:-$THREADS}
 
+                    if [ -d "$TMP_UPDATE" ]; then
+                        mkdir $TMP_UPDATE
+                    fi
+
                     # Run import as $RUNTIME_USER (e.g. scanoss)
-                    sudo -u $RUNTIME_USER bash -c "echo \"bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=/data/scanoss_tmp,FILE_DEL=0)\" | ldb"
+                    sudo -u $RUNTIME_USER bash -c "echo \"bulk insert oss from $UPDATE_DOWNLOAD/$KB_VERSION/mined WITH (THREADS=$THREADS,TMP=$TMP_UPDATE,FILE_DEL=0)\" | ldb"
 
                     else
                         echo "Disk space insufficient on $LDB_DISK_SPACE"

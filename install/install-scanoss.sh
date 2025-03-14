@@ -229,8 +229,6 @@ function install_application {
     tar -xzvf $tar_file_path -C "$APP_DIR/tmp/"
 
     log "Installing SCANOSS API"
-
-    mkdir -p /var/lib/ldb
     
     chmod +x $APP_DIR/tmp/scripts/env-setup.sh
     (cd $APP_DIR/tmp/scripts ; ./env-setup.sh )
@@ -373,6 +371,10 @@ function create_scanoss_user {
         echo "Stopping."
         exit 1
     fi
+
+
+
+
 fi
 }
 
