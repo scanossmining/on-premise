@@ -377,12 +377,10 @@ fi
 
 function create_ldb_directory {
 
-    read -p "Enter the directory to download the KB: " real_ldb_location
-
     if [ -L "/path/to/symlink" ]; then
         echo "Symlink exists"
     else
-        ln -s $real_ldb_location $LDB_LOCATION
+        ln -s $REAL_LDB_LOCATION $LDB_LOCATION
     fi
 
 }
