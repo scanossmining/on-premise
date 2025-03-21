@@ -229,8 +229,6 @@ function install_application {
     tar -xzvf $tar_file_path -C "$APP_DIR/tmp/"
 
     log "Installing SCANOSS API"
-
-    mkdir -p /var/lib/ldb
     
     chmod +x $APP_DIR/tmp/scripts/env-setup.sh
     (cd $APP_DIR/tmp/scripts ; ./env-setup.sh )
@@ -261,6 +259,17 @@ function install_application {
     fi
   }
 
+  correctOwnership() {
+
+    log 'Updating ownership for SCANOSS applications and directories'
+    chown -R $RUNTIME_USER:$RUNTIME_USER /var/log/$APP_NAME
+    chown -R $RUNTIME_USER:$RUNTIME_USER /usr/local/etc/$APP_NAME
+    chown -R $RUNTIME_USER:$RUNTIME_USER /bin/scanoss
+    chown -R $RUNTIME_USER:$RUNTIME_USER /bin/ldb
+    chown -R $RUNTIME_USER:$RUNTIME_USER /usr/lib/libscanoss_encoder.so
+
+  }
+
   case "$OS" in
     "Debian")
     select application in "Install all applications and dependencies" "Install dependencies" "engine" "ldb" "API" "encoder" "Quit"
@@ -272,6 +281,7 @@ function install_application {
                     installDpkg "ldb"
                     installApi
                     installEncoderLib
+                    correctOwnership
                     ;;
                 "Install dependencies")
                     install_application_dependencies 
@@ -308,6 +318,7 @@ function install_application {
                     installRpm "ldb"
                     installApi
                     installEncoderLib
+                    correctOwnership
                     ;;
                 "Install dependencies")
                     install_application_dependencies 
@@ -360,7 +371,18 @@ function create_scanoss_user {
         echo "Stopping."
         exit 1
     fi
+
 fi
+}
+
+function create_ldb_directory {
+
+    if [ -L "/path/to/symlink" ]; then
+        echo "Symlink exists"
+    else
+        ln -s $REAL_LDB_LOCATION $LDB_LOCATION
+    fi
+
 }
 
 # Main script
@@ -398,6 +420,7 @@ while true; do
     case $choice in
         1)
             create_scanoss_user
+            create_ldb_directory
             install_dependencies
             setup_sftp
             download_application
@@ -414,6 +437,7 @@ while true; do
             ;;
         5)
             create_scanoss_user
+            create_ldb_directory
             install_application
             ;;
         6)

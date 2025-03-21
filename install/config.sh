@@ -10,9 +10,11 @@ VERSION="latest"
 
 # Knowledge base configuration
 
-REMOTE_LDB_LOCATION="${REMOTE_LDB_LOCATION:-"/ldb/compressed/full/latest/oss/"}"
+REMOTE_LDB_LOCATION=/ldb/compressed/full/latest/oss/
 FREE_SPACE_REQUIRED="${FREE_SPACE_REQUIRED:-18}"
+REAL_LDB_LOCATION=""
 LDB_LOCATION=/var/lib/ldb
+TMP_UPDATE=""
 
 # SFTP credentials 
 SCANOSS_SFTP_USER=""
@@ -21,7 +23,7 @@ SCANOSS_SFTP_PASSWORD=""
 # System information
 OS=""
 
-#
+# Installation testing
 TEST_FILE_NAME="file_match.wfp"
 
 function log {
