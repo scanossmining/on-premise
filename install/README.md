@@ -33,6 +33,7 @@ To visualize the installation workflow, make sure to see the
 ## 
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'fontSize': '12px'}}}%%
 graph LR
     subgraph "Client Layer"
         CLI[CLI Tools]
@@ -41,7 +42,7 @@ graph LR
     end
     
     subgraph "API Gateway"
-        GO_API[SCANOSS Go API<br/>:8080<br/>REST Endpoints]
+        GO_API[SCANOSS Go API<br/>REST Endpoints]
     end
     
     subgraph "Core Processing"
@@ -50,13 +51,12 @@ graph LR
     end
     
     subgraph "Data Layer"
-        LDB[LiteDB<br/>Local Database<br/>Metadata Storage]
         KB_FULL[Knowledge Base<br/>Full Dataset<br/>18-22TB]
+        OR[OR]
         KB_TEST[Test Knowledge Base<br/>Sample Dataset<br/>700GB-1TB]
     end
     
     subgraph "System Layer"
-        FS[File System<br/>Temp Files<br/>Cache]
         CONFIG[Configuration<br/>app-config-prod.json<br/>Service Settings]
     end
     
@@ -67,21 +67,19 @@ graph LR
     GO_API --> ENGINE
     GO_API --> ENCODER
     
-    ENGINE --> LDB
     ENGINE --> KB_FULL
+    ENGINE --> OR
     ENGINE --> KB_TEST
-    ENCODER --> LDB
     
-    ENGINE --> FS
     GO_API --> CONFIG
     
     style GO_API fill:#e3f2fd
     style ENGINE fill:#e8f5e8
     style ENCODER fill:#fff3e0
-    style LDB fill:#f3e5f5
     style KB_FULL fill:#ffebee
     style KB_TEST fill:#e1f5fe
     style CONFIG fill:#fafafa
+    style OR fill:#fffde7
 ```
 
 ## Hardware Requirements
