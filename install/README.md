@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Installation Flow Diagram](#installation-flow-diagram)
 - [Hardware Requirements](#hardware-requirements)
   - [Full Knowledge Base Requirements](#full-knowledge-base-requirements)
   - [Test Knowledge Base Requirements](#test-knowledge-base-requirements)
@@ -26,6 +27,61 @@
 This document aims to guide users through the process of installing SCANOSS for on-premise environments.
 
 This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies, knowledge base updates and verifying a correct installation of every component.
+
+## Installation Flow Diagram
+
+```mermaid
+flowchart TD
+    START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions<br/>Run as root/sudo]
+    
+    PREP --> INSTALL[Run install-scanoss.sh]
+    
+    INSTALL --> MENU{Installation Menu}
+    
+    MENU -->|Option 1| ALL[Install Everything<br/>Complete automation]
+    MENU -->|Options 2-5| MANUAL[Manual Step-by-step]
+    
+    ALL --> DEPS[Install Dependencies<br/>Based on OS]
+    MANUAL --> DEPS
+    
+    DEPS --> SFTP[Setup SFTP Credentials<br/>Username & Password]
+    
+    SFTP --> DOWNLOAD[Download Applications<br/>From SFTP Server]
+    
+    DOWNLOAD --> APPS[Install SCANOSS Apps<br/>Engine, API, LDB, Encoder]
+    
+    APPS --> API_START{Start API Service?}
+    API_START -->|Yes| START_API[systemctl start<br/>scanoss-go-api.service]
+    API_START -->|No| KB_INSTALL
+    START_API --> KB_INSTALL[Run kb.sh]
+    
+    KB_INSTALL --> KB_MENU{Knowledge Base Menu}
+    
+    KB_MENU -->|Option 1| FULL_KB[Install Full SCANOSS KB<br/>~18-22TB<br/>Use tmux recommended]
+    KB_MENU -->|Option 2| TEST_KB[Install Test KB<br/>~700GB-1TB<br/>For testing only]
+    
+    FULL_KB --> VERIFY[Run test.sh]
+    TEST_KB --> VERIFY
+    
+    VERIFY --> TEST_MENU{Verification Menu}
+    
+    TEST_MENU --> SCAN_TEST[Test Scanning Feature<br/>Check scan_results.json]
+    TEST_MENU --> API_TEST[Check API Status<br/>Expect alive response]
+    TEST_MENU --> METRICS[Check API Metrics<br/>Request counts, etc.]
+    
+    SCAN_TEST --> SUCCESS
+    API_TEST --> SUCCESS
+    METRICS --> SUCCESS[Installation Complete!<br/>SCANOSS Ready to Use]
+    
+    SUCCESS --> END([End])
+    
+    style START fill:#c8e6c9
+    style SUCCESS fill:#c8e6c9
+    style END fill:#c8e6c9
+    style FULL_KB fill:#ffecb3
+    style TEST_KB fill:#e1f5fe
+    style API_START fill:#f3e5f5
+```
 
 ## Hardware Requirements
 
