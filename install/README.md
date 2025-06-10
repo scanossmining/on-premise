@@ -30,6 +30,8 @@ This repository contains all necessary scripts for installing the SCANOSS Knowle
 
 ## Installation Flow Diagram
 
+## Installation Flow Diagram
+
 ```mermaid
 flowchart TD
     START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions]
@@ -39,8 +41,10 @@ flowchart TD
     INSTALL --> MENU{Installation Menu}
     
     MENU -->|Option 1| ALL[Install Everything<br/>Complete automation]
+    MENU -->|Options 2-5| MANUAL[Manual Step-by-step]
     
     ALL --> DEPS[Install Dependencies<br/>Based on OS]
+    MANUAL --> DEPS
     
     DEPS --> SFTP[Setup SFTP Credentials<br/>Username & Password]
     
