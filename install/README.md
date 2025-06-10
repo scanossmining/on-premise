@@ -33,7 +33,6 @@ To visualize the installation workflow, make sure to see the
 ## 
 
 ```mermaid
-%%{init: {'theme':'base', 'themeVariables': {'fontSize': '12px'}}}%%
 graph LR
     subgraph "Client Layer"
         CLI[CLI Tools]
