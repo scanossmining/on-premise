@@ -27,7 +27,7 @@ This document aims to guide users through the process of installing SCANOSS for 
 
 This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies, knowledge base updates and verifying a correct installation of every component.
 
-## Hardware requisites
+## Hardware Requirements
 
 ### Full Knowledge Base Requirements
 
