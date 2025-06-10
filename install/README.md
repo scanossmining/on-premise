@@ -30,9 +30,10 @@ This repository contains all necessary scripts for installing the SCANOSS Knowle
 
 ## Installation Flow Diagram
 
-<div style="width: 100%; max-width: 700px;">
+<div style="width: 100%; max-width: 600px;">
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {'fontSize': '12px'}}}%%
 flowchart TD
     START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions]
     
