@@ -30,8 +30,6 @@ This repository contains all necessary scripts for installing the SCANOSS Knowle
 
 ## Installation Flow Diagram
 
-## Installation Flow Diagram
-
 ```mermaid
 flowchart TD
     START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions]
