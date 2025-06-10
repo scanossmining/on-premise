@@ -125,7 +125,8 @@ After executing the script, you will be prompted with the following menu
 SCANOSS KB Installation Menu
 ----------------------------
 1) Install SCANOSS KB
-2) Quit
+2) Install Test KB
+3) Quit
 Enter your choice [1-2]:
 ```
 
@@ -138,6 +139,20 @@ For users wanting to install the SCANOSS KB on the background, we recommend usin
 3. Create a tmux session and attach to it using ```tmux new-session -s mysession```
 4. Run the ```kb.sh``` script inside of the tmux session, and begin installing the SCANOSS KB
 5. After triggering the installation you can dettach from the session by pressing ```Ctrl+B``` and then ```d```, and attach again by using ```tmux attach -t mysession```
+
+If you choose the second option, the SCANOSS Test KB installation will start.
+
+We also recommend using ```tmux``` to avoid the download from stopping due to session termination, but due to it being smaller in size (around 50GB) it isn't strictly necessary.
+
+### SCANOSS with Test KB requirements
+
+- Operating systems supported: Debian 11/12 and CentOS
+
+|     | Minimum                   | Recommended               |
+|-----|---------------------------|---------------------------|
+| CPU | 8 Core x64 - 3.5 Ghz      | 32 Core x64 - 3.6 Ghz     |
+| RAM | 16GB                      | 32GB                      |
+| HDD | 700GB SSD (NVMe preferred)| 1TB SSD (NVMe preferred)  | 
 
 ## Verifying installation
 
