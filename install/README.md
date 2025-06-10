@@ -1,12 +1,35 @@
-# SCANOSS On-Premise 
+# SCANOSS On-Premise
 
-# Introduction
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Hardware Requirements](#hardware-requirements)
+  - [Full Knowledge Base Requirements](#full-knowledge-base-requirements)
+  - [Test Knowledge Base Requirements](#test-knowledge-base-requirements)
+- [Repository Contents](#repository-contents)
+- [Installation Guide](#installation-guide)
+  - [Preparing the Environment](#preparing-the-environment)
+  - [Installing SCANOSS Applications](#installing-scanoss-applications)
+    - [Installation Menu Options](#installation-menu-options)
+    - [Manual Installation Workflow](#manual-installation-workflow)
+    - [API Service Management](#api-service-management)
+    - [API Configuration](#api-configuration)
+  - [Installing the SCANOSS Knowledge Base](#installing-the-scanoss-knowledge-base)
+  - [Installing the Test Knowledge Base (Optional)](#installing-the-test-knowledge-base-optional)
+  - [Verifying Installation](#verifying-installation)
+- [Support](#support)
+
+---
+
+## Introduction
 
 This document aims to guide users through the process of installing SCANOSS for on-premise environments.
 
 This repository contains all necessary scripts for installing the SCANOSS Knowledge Base (SCANOSS KB), SCANOSS applications (engine, ldb, api and scanoss-encoder), dependencies, knowledge base updates and verifying a correct installation of every component.
 
-# Hardware requisites
+## Hardware requisites
+
+### Full Knowledge Base Requirements
 
 The following is recommended for running the SCANOSS Applications and SCANOSS KB:
 
@@ -18,6 +41,8 @@ The following is recommended for running the SCANOSS Applications and SCANOSS KB
 | RAM | 32GB                      | 128GB                     |
 | HDD | 18TB SSD (NVMe preferred) | 22TB SSD (NVMe preferred) |
 
+### Test Knowledge Base Requirements
+
 The following is recommended for running the SCANOSS Applications and SCANOSS Test KB:
 
 - Operating systems supported: Debian 11/12 and CentOS
@@ -28,7 +53,7 @@ The following is recommended for running the SCANOSS Applications and SCANOSS Te
 | RAM | 16GB                      | 32GB                      |
 | HDD | 700GB SSD (NVMe preferred)| 1TB SSD (NVMe preferred)  | 
 
-# Contents of this repository
+## Repository Contents
 
 - [install-scanoss.sh](./install-scanoss.sh): bash script for installing SCANOSS (SFTP user setup creation, dependencies installation and application download/install)
 - [kb.sh](./kb.sh): bash script for installing the SCANOSS KB
@@ -37,9 +62,9 @@ The following is recommended for running the SCANOSS Applications and SCANOSS Te
 - [config.sh](./config.sh): configuration file
 - [kb-update.sh](../update): directory containing the knowledge base update guide and script
 
-# Step-by-step
+## Installation Guide
 
-## Preparing the environment 
+### Preparing The Environment 
 
 After receiving the email from our Sales team containing this repository's contents as well as the credentials to access our SFTP server, you will have everything needed to begin installing SCANOSS.
 
@@ -51,7 +76,7 @@ chmod -R +x <scripts-folder>/*.sh
 
 Another thing to keep in my mind is that this script needs to be run as root, either using ```sudo``` or directly as the root user.
 
-## Installing SCANOSS with install-scanoss.sh
+### Installing SCANOSS Applications
 
 The first script you'll need to run is ``install-scanoss.sh``, this script will take care of setting up your SFTP credentials, installing system/application dependencies and downloading/installing SCANOSS applications.
 
@@ -60,6 +85,8 @@ To run the command type:
 ```
 ./install-scanoss.sh
 ```
+
+#### Installation Menu Options
 
 You will be prompted with the following menu:
 
@@ -80,6 +107,8 @@ Enter your choice [1-6]:
 
 The first option ```Install everything``` includes all other options, that means that this option will install system dependencies (based on the host machine OS), setup your SFTP user credentials (for pulling the application packages from our SFTP server, and in ```kb.sh``` pulling the SCANOSS KB), download application packages and installing SCANOSS applications.
 
+#### Manual Installation Workflow
+
 In some cases, users may prefer to manually trigger each step and maybe skipping one (e.g. users who may want to download packages from one computer, and installing them in another). So if you are in this situation, the correct workflow for manual trigger of options would be:
 
 1. Install Dependencies: this will automatically download all required system dependencies, based on your OS
@@ -89,7 +118,7 @@ In some cases, users may prefer to manually trigger each step and maybe skipping
 
 > **_Note:_**  During the script, you will also be prompted for setting up installation paths and so on. We recommend using the default values for most options, this will make it easier for debugging if needed.
 
-### API service startup
+#### API Service Management
 
 By default, the script doesn't start the API service, in order to start it run the following command:
 
@@ -111,7 +140,7 @@ systemctl stop scanoss-go-api.service
 
 > **_Note:_** You may need to run this commands with ```sudo <command>```, depending on your environment configuration.
 
-### API Configuration
+#### API Configuration
 
 In case you want to modify the configuration of the API service, the configuration file will be located in ```/opt/scanoss/tmp/scripts/app-config-prod.json``` (defined by the APP_DIR variable in ```config.sh```).
 
@@ -119,7 +148,7 @@ Inside the configuration file, you will see multiple options such as app informa
 
 To restart the service with the new options you added/modified, run the ```install-scanoss.sh``` choose option 5) Install Application and then option 5) API, and the service will update with the new configuration.
 
-## Installing the SCANOSS Knowledge Base
+### Installing the SCANOSS Knowledge Base
 
 When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB installation script ```kb.sh```.
 
@@ -150,7 +179,7 @@ For users wanting to install the SCANOSS KB on the background, we recommend usin
 4. Run the ```kb.sh``` script inside of the tmux session, and begin installing the SCANOSS KB
 5. After triggering the installation you can dettach from the session by pressing ```Ctrl+B``` and then ```d```, and attach again by using ```tmux attach -t mysession```
 
-## Installing the SCANOSS Test Knowledge Base (optional)
+### Installing the SCANOSS Test Knowledge Base
 
 When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB installation script ```kb.sh```.
 
@@ -175,7 +204,7 @@ If you choose the second option, the SCANOSS Test KB installation will start.
 
 We also recommend using ```tmux``` to avoid the download from stopping due to session termination, but due to it being smaller in size (around 50GB) it isn't strictly necessary.
 
-## Verifying installation
+### Verifying installation
 
 After running ```install.sh``` and ```kb.sh```, you will have installed everything you need to run SCANOSS.
 
@@ -214,6 +243,6 @@ The output to look for would be the following:
 
 After verifying every part of SCANOSS is working, the installation process would be finished
 
-# Support
+## Support
 
 If you encounter any issues with the scripts or have any questions, feel free to get in touch with us through the channels provided by the sales team.
