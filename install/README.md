@@ -32,14 +32,13 @@ This repository contains all necessary scripts for installing the SCANOSS Knowle
 
 ```mermaid
 flowchart TD
-    START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions<br/>Run as root/sudo]
+    START([Start Installation]) --> PREP[Prepare Environment<br/>Set permissions]
     
-    PREP --> INSTALL[Run install-scanoss.sh]
+    PREP --> INSTALL[Run sudo install-scanoss.sh]
     
     INSTALL --> MENU{Installation Menu}
     
     MENU -->|Option 1| ALL[Install Everything<br/>Complete automation]
-    MENU -->|Options 2-5| MANUAL[Manual Step-by-step]
     
     ALL --> DEPS[Install Dependencies<br/>Based on OS]
     MANUAL --> DEPS
