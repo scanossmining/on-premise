@@ -66,15 +66,24 @@ The following is recommended for running the SCANOSS Applications and SCANOSS Te
 
 ### Preparing The Environment 
 
-After receiving the email from our Sales team containing this repository's contents as well as the credentials to access our SFTP server, you will have everything needed to begin installing SCANOSS.
+You will receive en email from our Sales team containing the credentials to access our SFTP server, take note of those credentials as we are going to use them during the installation.
+
+The first step would be cloning this repository using git:
+
+```
+# If you don't have git installed in your environment install it with 'apt install git' (for Debian) or 'yum install git' (for CentOS/RedHat)
+
+git clone https://github.com/scanoss/on-premise.git
+```
 
 Make sure the scripts have execution permissions, if not add them with the following command:
 
 ```
-chmod -R +x <scripts-folder>/*.sh
+cd on-premise/install/
+chmod +x *.sh
 ```
 
-Another thing to keep in my mind is that this script needs to be run as root, either using ```sudo``` or directly as the root user.
+Another thing to keep in mind is that these scripts needs to be run as root, either using ```sudo``` or directly as the root user.
 
 ### Installing SCANOSS Applications
 
@@ -83,7 +92,7 @@ The first script you'll need to run is ``install-scanoss.sh``, this script will 
 To run the command type:
 
 ```
-./install-scanoss.sh
+sudo ./install-scanoss.sh
 ```
 
 #### Installation Menu Options
@@ -155,7 +164,7 @@ When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB
 To run the command type:
 
 ```
-./kb.sh
+sudo ./kb.sh
 ```
 
 After executing the script, you will be prompted with the following menu
@@ -186,7 +195,7 @@ When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB
 To run the command type:
 
 ```
-./kb.sh
+sudo ./kb.sh
 ```
 
 After executing the script, you will be prompted with the following menu
