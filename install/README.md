@@ -41,7 +41,6 @@ flowchart TD
     MENU -->|Option 1| ALL[Install Everything<br/>Complete automation]
     
     ALL --> DEPS[Install Dependencies<br/>Based on OS]
-    MANUAL --> DEPS
     
     DEPS --> SFTP[Setup SFTP Credentials<br/>Username & Password]
     
