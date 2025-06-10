@@ -179,7 +179,7 @@ For users wanting to install the SCANOSS KB on the background, we recommend usin
 4. Run the ```kb.sh``` script inside of the tmux session, and begin installing the SCANOSS KB
 5. After triggering the installation you can dettach from the session by pressing ```Ctrl+B``` and then ```d```, and attach again by using ```tmux attach -t mysession```
 
-### Installing the SCANOSS Test Knowledge Base
+### Installing the Test Knowledge Base (Optional)
 
 When ```installation-script.sh``` is done, you can proceed to run the SCANOSS KB installation script ```kb.sh```.
 
