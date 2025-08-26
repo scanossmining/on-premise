@@ -168,7 +168,7 @@ while true; do
             exit 0
             ;;
         *)
-            echo "Invalid option. Please enter a number between 1-4."
+            echo "Invalid option. Please enter a number between 1-2."
             ;;
     esac
 done
