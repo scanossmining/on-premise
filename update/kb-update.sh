@@ -43,7 +43,7 @@ function kb_update() {
     echo "Available versions: "
     echo "-------------------"
 
-    echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk '/^[dl]/ && $9 != "." && $9 != ".." {printf "%.1fGB\t%s\n", 120, $9}'
+    echo "ls $BASE_REMOTE_PATH/$UPDATE_FREQUENCY" | lftp -u "$(cat ~/.ssh_user)":"$(cat ~/.sshpass)" sftp://sftp.scanoss.com:49322 | awk '/^[dl]/ && $9 != "." && $9 != ".." {printf "%.1fGB\t%s\n", $5/(1024^3), $9}'
 
     echo "-------------------"
     echo 
