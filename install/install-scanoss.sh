@@ -371,13 +371,12 @@ fi
 }
 
 function create_ldb_directory {
-
-    if [ -L "/path/to/symlink" ]; then
-        echo "Symlink exists"
+    if [ ! -d "$LDB_LOCATION" ]; then
+        echo "Creating LDB directory: $LDB_LOCATION"
+        mkdir -p "$LDB_LOCATION"
     else
-        ln -s $REAL_LDB_LOCATION $LDB_LOCATION
+        echo "LDB directory already exists: $LDB_LOCATION"
     fi
-
 }
 
 # Main script
