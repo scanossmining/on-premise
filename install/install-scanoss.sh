@@ -38,6 +38,7 @@ function install_dependencies {
       xz-utils
       p7zip-full
       libsodium23
+      libgcrypt20-dev
   )
 
   rpm_packages=(
