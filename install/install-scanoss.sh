@@ -151,13 +151,7 @@ function install_application {
         log "Installing application dependencies"
 
         local dependency_package_path="$APP_DIR/app_dependencies/"
-        if [ $OS = "Debian" ]; then
-            if dpkg -l | grep -q "libssl1.1"; then
-                log "libssl1.1 is already installed"
-            else
-                dpkg -i "$dependency_package_path/debian/libssl1.1"*"amd64.deb"
-            fi
-        elif [ $OS = "CentOS" ]; then
+        if [ $OS = "CentOS" ]; then
             if dnf list installed | grep -q "libsodium"; then
                 log "libsodium is already installed via package manager"
             else
