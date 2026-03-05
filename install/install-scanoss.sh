@@ -38,6 +38,7 @@ function install_dependencies {
       xz-utils
       p7zip-full
       libsodium23
+      libgcrypt20-dev
   )
 
   rpm_packages=(
@@ -151,13 +152,7 @@ function install_application {
         log "Installing application dependencies"
 
         local dependency_package_path="$APP_DIR/app_dependencies/"
-        if [ $OS = "Debian" ]; then
-            if dpkg -l | grep -q "libssl1.1"; then
-                log "libssl1.1 is already installed"
-            else
-                dpkg -i "$dependency_package_path/debian/libssl1.1"*"amd64.deb"
-            fi
-        elif [ $OS = "CentOS" ]; then
+        if [ $OS = "CentOS" ]; then
             if dnf list installed | grep -q "libsodium"; then
                 log "libsodium is already installed via package manager"
             else
@@ -376,13 +371,12 @@ fi
 }
 
 function create_ldb_directory {
-
-    if [ -L "/path/to/symlink" ]; then
-        echo "Symlink exists"
+    if [ ! -d "$LDB_LOCATION" ]; then
+        echo "Creating LDB directory: $LDB_LOCATION"
+        mkdir -p "$LDB_LOCATION"
     else
-        ln -s $REAL_LDB_LOCATION $LDB_LOCATION
+        echo "LDB directory already exists: $LDB_LOCATION"
     fi
-
 }
 
 # Main script

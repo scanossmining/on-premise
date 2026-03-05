@@ -11,6 +11,7 @@ function download_kb () {
 
   if [ $KB = Test ]; then
     REMOTE_LDB_LOCATION="/ldb/test-compressed/full/latest/oss/"
+    FREE_SPACE_REQUIRED=$TEST_FREE_SPACE_REQUIRED
     read -p "Download $KB KB (y/abort) [abort]? " -n 1 -r
     echo
   elif [ $KB = SCANOSS ]; then
